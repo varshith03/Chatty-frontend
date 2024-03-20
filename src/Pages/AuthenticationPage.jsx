@@ -30,7 +30,7 @@ const AuthenticationPage = () => {
 
   return (
     <Container maxW="xl" centerContent>
-      <Button onClick={toggleColorMode}>
+      <Button bg={bgColor} _hover={{ bg: "#FADA5E" }} onClick={toggleColorMode}>
         Toggle {colorMode === "light" ? "Dark" : "Light"}
       </Button>
       <Box

@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { ChatContext } from "../../Context/ChatProvider";
 import { Avatar, Box, Text, useColorMode, useTheme } from "@chakra-ui/react";
 
-const UserListItem = ({ user, handleFunction }) => {
+const UserListItem = ({ user, handleGroup, isActive }) => {
   const { colorMode, toggleColorMode } = useColorMode();
   const theme = useTheme();
 
@@ -10,22 +10,22 @@ const UserListItem = ({ user, handleFunction }) => {
     colorMode === "light" ? theme.colors.white : theme.colors.gray["800"];
   const textColor =
     colorMode === "light" ? theme.colors.black : theme.colors.white;
-  // const { user } = useContext(ChatContext);
+
   return (
     <Box
-      onClick={() => handleFunction(user)}
       w="100%"
       display={"flex"}
       alignItems={"center"}
-      color={"black"}
-      bg={"E8E8E8"}
+      color={textColor}
       cursor={"pointer"}
-      _hover={{ bg: "#FADA5E" }}
+      _hover={{ bg: "lightgray", color: "black" }}
       px={3}
       py={2}
       mb={2}
       borderRadius={"lg"}
-      // bgColor={bgColor}
+      // bg={bgColor}
+      bg={isActive ? "gray.200" : "white"}
+      onClick={() => handleGroup(user)}
     >
       <Avatar
         mr={2}
@@ -36,7 +36,11 @@ const UserListItem = ({ user, handleFunction }) => {
       />
       <Box>
         <Text>{user.name}</Text>
-        <Text fontSize="xs">
+        <Text
+          fontSize="xs"
+          isTruncated
+          style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}
+        >
           <b>Email:</b> {user.email}
         </Text>
       </Box>

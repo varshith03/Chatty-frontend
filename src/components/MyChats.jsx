@@ -15,8 +15,9 @@ import { AddIcon } from "@chakra-ui/icons";
 import ChatLoading from "./miscellaneous/ChatLoading";
 import ChatSkelleton from "./miscellaneous/ChatSkelleton";
 import { getSender } from "../config/ChatLogic.js";
+import GroupModalView from "./miscellaneous/GroupModalView.jsx";
 
-const MyChats = () => {
+const MyChats = ({ refreshChats }) => {
   const [loggedUser, setLoggedUser] = useState();
 
   const { user, selectedChat, setSelectedChat, chats, setChats } =
@@ -57,7 +58,7 @@ const MyChats = () => {
   useEffect(() => {
     setLoggedUser(user);
     fetchChats();
-  }, []);
+  }, [refreshChats]);
 
   return (
     <Box
@@ -66,7 +67,7 @@ const MyChats = () => {
       alignItems="center"
       padding={3}
       backgroundColor={bgColor}
-      width={{ base: "100%", md: "31%" }}
+      width={{ base: "100%", md: "30%" }}
       borderRadius="lg"
       borderWidth="1px"
     >
@@ -78,16 +79,17 @@ const MyChats = () => {
         display="flex"
         width="100%"
         justifyContent="space-between"
-        alignItems="center"
       >
         My Chats
-        <Button
-          display="flex"
-          fontSize={{ base: "17px", md: "10px", lg: "17px" }}
-          rightIcon={<AddIcon />}
-        >
-          New Group Chat
-        </Button>
+        <GroupModalView>
+          <Button
+            display="flex"
+            fontSize={{ base: "17px", md: "10px", lg: "17px" }}
+            rightIcon={<AddIcon />}
+          >
+            New Group Chat
+          </Button>
+        </GroupModalView>
       </Box>
       <Box
         d="flex"
@@ -106,7 +108,8 @@ const MyChats = () => {
               <Box
                 onClick={() => setSelectedChat(chat)}
                 cursor="pointer"
-                bg={selectedChat === chat ? "#FADA5E" : "#E8E8E8"}
+                bg={selectedChat === chat ? "#FADA5E" : { bgColor }}
+                _hover={{ bg: "lightgray", color: "black" }}
                 color={textColor}
                 px={3}
                 py={2}

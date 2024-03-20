@@ -7,12 +7,17 @@ import {
   InputRightElement,
   VStack,
   position,
+  useColorMode,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { apiURL } from "../../constants/common";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "@emotion/react";
+import Icon from "react-icons-kit";
+import { eye, eyeOff } from "react-icons-kit/feather";  
+import { ChatContext } from "../../Context/ChatProvider";
 
 const Login = () => {
   const [show, setShow] = useState(false);
@@ -21,6 +26,14 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const toast = useToast();
   const navigate = useNavigate();
+  const {user,setUser} = useContext(ChatContext);
+  const { colorMode, toggleColorMode } = useColorMode();
+  const theme = useTheme();
+
+  const bgColor =
+    colorMode === "light" ? theme.colors.white : theme.colors.gray["800"];
+  const textColor =
+    colorMode === "light" ? theme.colors.black : theme.colors.white;
 
   const handleClick = () => setShow(!show);
 
@@ -54,6 +67,7 @@ const Login = () => {
         position: "top",
       });
       localStorage.setItem("userInfo", JSON.stringify(data));
+      setUser(data);
       setLoading(false);
       navigate("/chats");
     } catch (error) {
@@ -62,7 +76,7 @@ const Login = () => {
         status: "error",
         duration: 3000,
         isClosable: true,
-        position: "bottom",
+        position: "top-right",
       });
       setLoading(false);
     }
@@ -93,9 +107,9 @@ const Login = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           ></Input>
-          <InputRightElement width="4.5rem">
-            <Button h="1.75rem" size="sm" onClick={handleClick}>
-              {show ? "Hide" : "Show"}
+          <InputRightElement width="2.5rem">
+            <Button size="sm" mr={1} bg={"none"} onClick={handleClick}>
+              <Icon icon={show ? eyeOff : eye} size={20} />
             </Button>
           </InputRightElement>
         </InputGroup>

@@ -30,6 +30,7 @@ import ChatSkelleton from "./ChatSkelleton";
 import axios from "axios";
 import { apiURL } from "../../constants/common";
 import UserListItem from "../User/UserListItem";
+import "@fortawesome/fontawesome-free/css/all.css";
 
 const SideDrawer = () => {
   const [search, setSearch] = useState("");
@@ -75,6 +76,15 @@ const SideDrawer = () => {
       );
       setLoading(false);
       setSearchResult(data);
+      if (data.length < 1) {
+        toast({
+          title: "No users found🙁",
+          status: "info",
+          duration: "3000",
+          isClosable: true,
+          position: "top-left",
+        });
+      }
     } catch (error) {
       console.log(error.message);
       toast({
@@ -85,6 +95,12 @@ const SideDrawer = () => {
         isClosable: true,
         position: "top-left",
       });
+    }
+  };
+
+  const handleEnter = (e) => {
+    if (e.key === "Enter") {
+      handleSearch(e);
     }
   };
 
@@ -169,7 +185,11 @@ const SideDrawer = () => {
             </MenuList>
           </Menu>
           <Menu>
-            <MenuButton as={Button} bgColor={bgColor} rightIcon={<ChevronDownIcon />}>
+            <MenuButton
+              as={Button}
+              bgColor={bgColor}
+              rightIcon={<ChevronDownIcon />}
+            >
               <Avatar
                 size="sm"
                 cursor="pointer"
@@ -199,6 +219,7 @@ const SideDrawer = () => {
                 value={search}
                 mr={2}
                 onChange={(e) => setSearch(e.target.value)}
+                onKeyDown={handleEnter}
               ></Input>
               <Button onClick={handleSearch}>Go</Button>
             </Box>
@@ -209,7 +230,7 @@ const SideDrawer = () => {
                 <UserListItem
                   key={user._id}
                   user={user}
-                  handleFunction={() => accessChat(user._id)}
+                  handleGroup={() => accessChat(user._id)}
                 />
               ))
             )}

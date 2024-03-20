@@ -8,6 +8,8 @@ import { ChatContext } from "../Context/ChatProvider";
 
 const ChatPage = () => {
   const { user } = useContext(ChatContext);
+  const [refreshChats, setRefreshChats] = useState(false);
+
   return (
     <div style={{ width: "100%" }}>
       <SideDrawer></SideDrawer>
@@ -17,9 +19,15 @@ const ChatPage = () => {
         w="100%"
         h="90vh"
         p="10px"
+        gap={2}
       >
-        {user && <MyChats />}
-        {user && <ChatBox />}
+        {user && <MyChats refreshChats={refreshChats} />}
+        {user && (
+          <ChatBox
+            refreshChats={refreshChats}
+            setRefreshChats={setRefreshChats}
+          />
+        )}
       </Box>
     </div>
   );

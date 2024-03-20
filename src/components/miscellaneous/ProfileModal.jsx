@@ -57,6 +57,8 @@ const ProfileModal = ({ user, children }) => {
             <Text
               fontSize={{ base: "28px", md: "30px" }}
               fontFamily="Work sans"
+              textAlign={"center"}
+              style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}
             >
               {user.email}
             </Text>

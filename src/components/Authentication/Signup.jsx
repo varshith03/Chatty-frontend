@@ -13,6 +13,9 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { apiURL } from "../../constants/common";
+import Icon from "react-icons-kit";
+import { eye, eyeOff } from "react-icons-kit/feather";
+import CustomFileUpload from "../miscellaneous/CustomFileUpload";
 
 const Signup = () => {
   const [show, setShow] = useState(false);
@@ -26,44 +29,6 @@ const Signup = () => {
 
   const handleClick = () => setShow(!show);
 
-  // const postDetails = (photos) => {
-  //   setLoading(true);
-  //   if (
-  //     !photos ||
-  //     !photos.type ||
-  //     (photos.type !== "image/jpg" && photos.type !== "image/png")
-  //   ) {
-  //     toast({
-  //       title: "Please select a JPG or PNG image!",
-  //       status: "warning",
-  //       duration: 5000,
-  //       isClosable: true,
-  //       position: "bottom",
-  //     });
-  //     setLoading(false);
-  //     return;
-  //   }
-
-  //   const data = new FormData();
-  //   data.append("file", photos);
-  //   data.append("upload_preset", "chat-app");
-  //   data.append("cloud_name", "dg3vsquxp");
-  //   fetch("https://api.cloudinary.com/v1_1/dg3vsquxp/image/upload", {
-  //     method: "post",
-  //     body: data,
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       setPhoto(data.url.toString());
-  //       console.log(data);
-  //       setLoading(false);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       setLoading(false);
-  //     });
-  // };
-
   const postDetails = (pics) => {
     setLoading(true);
     if (pics === undefined) {
@@ -72,7 +37,7 @@ const Signup = () => {
         status: "warning",
         duration: 5000,
         isClosable: true,
-        position: "bottom",
+        position: "top-right",
       });
       return;
     }
@@ -102,7 +67,7 @@ const Signup = () => {
         status: "warning",
         duration: 5000,
         isClosable: true,
-        position: "bottom",
+        position: "top-right",
       });
       setLoading(false);
       return;
@@ -118,7 +83,7 @@ const Signup = () => {
         status: "warning",
         duration: 5000,
         isClosable: true,
-        position: "bottom",
+        position: "top-right",
       });
       setLoading(false);
       return;
@@ -129,7 +94,7 @@ const Signup = () => {
         status: "warning",
         duration: 5000,
         isClosable: true,
-        position: "bottom",
+        position: "top-right",
       });
       setLoading(false);
       return;
@@ -164,7 +129,7 @@ const Signup = () => {
         status: "error",
         duration: 6000,
         isClosable: false,
-        position: "bottom",
+        position: "top-right",
       });
       setLoading(false);
     }
@@ -196,9 +161,9 @@ const Signup = () => {
             placeholder="Enter Password"
             onChange={(e) => setPassword(e.target.value)}
           ></Input>
-          <InputRightElement width="4.5rem">
-            <Button h="1.75rem" size="sm" onClick={handleClick}>
-              {show ? "Hide" : "Show"}
+          <InputRightElement width="2.5rem">
+            <Button size="sm" mr={1} bg={"none"} onClick={handleClick}>
+              <Icon icon={show ? eyeOff : eye} size={20} />
             </Button>
           </InputRightElement>
         </InputGroup>
@@ -212,15 +177,15 @@ const Signup = () => {
             placeholder="Confirm Password"
             onChange={(e) => setConfirmpassword(e.target.value)}
           ></Input>
-          <InputRightElement width="4.5rem">
-            <Button h="1.75rem" size="sm" onClick={handleClick}>
-              {show ? "Hide" : "Show"}
+          <InputRightElement width="2.5rem">
+            <Button size="sm" mr={1} bg={"none"} onClick={handleClick}>
+              <Icon icon={show ? eyeOff : eye} size={20} />
             </Button>
           </InputRightElement>
         </InputGroup>
       </FormControl>
 
-      <FormControl id="photo" isRequired>
+      <FormControl id="photo">
         <FormLabel>Upload your Picture</FormLabel>
         <Input
           type="file"
@@ -229,6 +194,8 @@ const Signup = () => {
           onChange={(e) => postDetails(e.target.files[0])}
         ></Input>
       </FormControl>
+
+      <CustomFileUpload onChange={(e) => handleFileUpload(e.target.files)} />
 
       <Button
         colorScheme="yellow"
