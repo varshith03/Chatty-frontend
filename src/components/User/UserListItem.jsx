@@ -23,8 +23,7 @@ const UserListItem = ({ user, handleGroup, isActive }) => {
       py={2}
       mb={2}
       borderRadius={"lg"}
-      // bg={bgColor}
-      bg={isActive ? "gray.200" : "white"}
+      bg={isActive ? "gray.200" : {bgColor}}
       onClick={() => handleGroup(user)}
     >
       <Avatar

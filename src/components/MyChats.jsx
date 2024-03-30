@@ -31,6 +31,8 @@ const MyChats = ({ refreshChats }) => {
     colorMode === "light" ? theme.colors.white : theme.colors.gray["800"];
   const textColor =
     colorMode === "light" ? theme.colors.black : theme.colors.white;
+  const innerBoxColor =
+    colorMode === "light" ? theme.colors.gray["100"] : theme.colors.gray["700"];
 
   // Function for fetching chats
   const fetchChats = async () => {
@@ -95,8 +97,8 @@ const MyChats = ({ refreshChats }) => {
         d="flex"
         flexDir="column"
         p={3}
-        // bg="#F8F8F8"
-        backgroundColor={bgColor}
+        // bg="#E8E8E8"
+        backgroundColor={innerBoxColor}
         w="100%"
         h="100%"
         borderRadius="lg"
@@ -110,7 +112,7 @@ const MyChats = ({ refreshChats }) => {
                 cursor="pointer"
                 bg={selectedChat === chat ? "#FADA5E" : { bgColor }}
                 _hover={{ bg: "lightgray", color: "black" }}
-                color={textColor}
+                color={selectedChat === chat ? "black" : { textColor }}
                 px={3}
                 py={2}
                 borderRadius="lg"

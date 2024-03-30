@@ -196,7 +196,7 @@ const UpdateGroupChatModel = ({
       //SPECIAL FEATURE FOR GROUP CHATS i.e admin leaves all users removed
       userToRemove._id === user._id ? setSelectedChat() : setSelectedChat(data);
       setRefreshChats(!refreshChats);
-      //   fetchMessages();
+      fetchMessages();
       setLoading(false);
     } catch (error) {
       toast({

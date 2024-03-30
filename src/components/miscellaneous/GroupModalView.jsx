@@ -98,6 +98,9 @@ const GroupModalView = ({ children }) => {
 
     fetchSearchResults();
   }, [debouncedSearch]);
+
+
+  
   
   const handleSearch = (e) => {
     const value = e.target.value;

@@ -16,8 +16,9 @@ import { apiURL } from "../../constants/common";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@emotion/react";
 import Icon from "react-icons-kit";
-import { eye, eyeOff } from "react-icons-kit/feather";  
+import { eye, eyeOff } from "react-icons-kit/feather";
 import { ChatContext } from "../../Context/ChatProvider";
+import ChatLoading from "../miscellaneous/ChatLoading";
 
 const Login = () => {
   const [show, setShow] = useState(false);
@@ -26,7 +27,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const toast = useToast();
   const navigate = useNavigate();
-  const {user,setUser} = useContext(ChatContext);
+  const { user, setUser } = useContext(ChatContext);
   const { colorMode, toggleColorMode } = useColorMode();
   const theme = useTheme();
 
@@ -59,17 +60,19 @@ const Login = () => {
         { email, password },
         config
       );
-      toast({
-        title: "Login Successful",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-        position: "top",
-      });
-      localStorage.setItem("userInfo", JSON.stringify(data));
-      setUser(data);
-      setLoading(false);
-      navigate("/chats");
+      setTimeout(() => {
+        toast({
+          title: "Login Successful",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+          position: "top",
+        });
+        localStorage.setItem("userInfo", JSON.stringify(data));
+        setUser(data);
+        setLoading(false);
+        navigate("/chats");
+      }, 3000);
     } catch (error) {
       toast({
         title: "Invalid Email or Password",
@@ -88,46 +91,54 @@ const Login = () => {
   };
 
   return (
-    <VStack>
-      <FormControl id="email" isRequired>
-        <FormLabel>Email</FormLabel>
-        <Input
-          placeholder="Enter your Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        ></Input>
-      </FormControl>
-
-      <FormControl id="password" isRequired>
-        <FormLabel>Password</FormLabel>
-        <InputGroup>
+    <>
+      <VStack>
+        <FormControl id="email" isRequired>
+          <FormLabel>Email</FormLabel>
           <Input
-            type={show ? "text" : "password"}
-            placeholder="Enter Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter your Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           ></Input>
-          <InputRightElement width="2.5rem">
-            <Button size="sm" mr={1} bg={"none"} onClick={handleClick}>
-              <Icon icon={show ? eyeOff : eye} size={20} />
-            </Button>
-          </InputRightElement>
-        </InputGroup>
-      </FormControl>
+        </FormControl>
 
-      <Button
-        colorScheme="yellow"
-        width="100%"
-        mt={15}
-        onClick={handleLogin}
-        isLoading={loading}
-      >
-        Login
-      </Button>
-      <Button colorScheme="yellow" width="100%" mt={15} onClick={guestDetails}>
-        Get GuestUser Login
-      </Button>
-    </VStack>
+        <FormControl id="password" isRequired>
+          <FormLabel>Password</FormLabel>
+          <InputGroup>
+            <Input
+              type={show ? "text" : "password"}
+              placeholder="Enter Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            ></Input>
+            <InputRightElement width="2.5rem">
+              <Button size="sm" mr={1} bg={"none"} onClick={handleClick}>
+                <Icon icon={show ? eyeOff : eye} size={20} />
+              </Button>
+            </InputRightElement>
+          </InputGroup>
+        </FormControl>
+
+        <Button
+          colorScheme="yellow"
+          width="100%"
+          mt={15}
+          onClick={handleLogin}
+          isLoading={loading}
+        >
+          Login
+        </Button>
+        <Button
+          colorScheme="yellow"
+          width="100%"
+          mt={15}
+          onClick={guestDetails}
+        >
+          Get GuestUser Login
+        </Button>
+      </VStack>
+      {loading && <ChatLoading />}
+    </>
   );
 };
 

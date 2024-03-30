@@ -27,6 +27,8 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
   const toast = useToast();
 
+  const { VITE_APP_CLOUDINARY_URL, VITE_APP_CLOUD_NAME } = import.meta.env;
+
   const handleClick = () => setShow(!show);
 
   const postDetails = (pics) => {
@@ -41,13 +43,13 @@ const Signup = () => {
       });
       return;
     }
-    // console.log(pics);
+    console.log(pics);
     if (pics.type === "image/jpeg" || pics.type === "image/png") {
       const data = new FormData();
       data.append("file", pics);
       data.append("upload_preset", "chat-app");
-      data.append("cloud_name", "dg3vsquxp");
-      fetch("https://api.cloudinary.com/v1_1/dg3vsquxp/image/upload", {
+      data.append("cloud_name", VITE_APP_CLOUD_NAME);
+      fetch(VITE_APP_CLOUDINARY_URL, {
         method: "post",
         body: data,
       })
@@ -56,10 +58,18 @@ const Signup = () => {
           setProfile_pic(data.url.toString());
           console.log(data.url.toString());
           setLoading(false);
+          toast({
+            title: "Photo Uploaded",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+            position: "top-right",
+          });
         })
         .catch((err) => {
-          console.log(err);
           setLoading(false);
+          console.log(err);
+          return;
         });
     } else {
       toast({
@@ -76,6 +86,9 @@ const Signup = () => {
 
   const handleSubmit = async () => {
     setLoading(true);
+    if (profile_pic === "") {
+      setProfile_pic("https://cdn-icons-png.flaticon.com/512/1053/1053244.png");
+    }
     if (!name || !email || !password || !confirmpassword) {
       toast({
         description:
@@ -120,7 +133,6 @@ const Signup = () => {
       });
       localStorage.setItem("userInfo", JSON.stringify(data));
       setLoading(false);
-      // history.push("/chats");
     } catch (error) {
       console.log(error);
       toast({
@@ -187,15 +199,14 @@ const Signup = () => {
 
       <FormControl id="photo">
         <FormLabel>Upload your Picture</FormLabel>
-        <Input
+        {/* <Input
           type="file"
           p={1.5}
           accept="image/*"
           onChange={(e) => postDetails(e.target.files[0])}
-        ></Input>
+        ></Input> */}
+        <CustomFileUpload onChange={(e) => postDetails(e.target.files[0])} />
       </FormControl>
-
-      <CustomFileUpload onChange={(e) => handleFileUpload(e.target.files)} />
 
       <Button
         colorScheme="yellow"

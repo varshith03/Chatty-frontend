@@ -18,11 +18,16 @@ const CustomFileUpload = ({ onChange }) => {
         onChange={onChange}
         display="none"
         id="file-upload"
-        cursor="pointer"
       />
       <label htmlFor="file-upload">
         <Center flexDirection="column">
-          <Icon as={AttachmentIcon} boxSize={8} color="gray.500" mb={2} cursor="pointer"/>
+          <Icon
+            as={AttachmentIcon}
+            boxSize={8}
+            color="gray.500"
+            mb={2}
+            cursor="pointer"
+          />
           <Text fontSize="sm" color="gray.500">
             Click or drop files here to upload
           </Text>
