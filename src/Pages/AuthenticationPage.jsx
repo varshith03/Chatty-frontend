@@ -19,10 +19,6 @@ const AuthenticationPage = () => {
   const { colorMode, toggleColorMode } = useColorMode();
   const theme = useTheme();
 
-  useEffect(() => {
-    console.log(theme);
-  }, []);
-
   const bgColor =
     colorMode === "light" ? theme.colors.white : theme.colors.gray["800"];
   const textColor =

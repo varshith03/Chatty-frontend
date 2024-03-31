@@ -126,7 +126,6 @@ const GroupModalView = ({ children }) => {
     setSelectedUsers([...selectedUsers, userToAdd]);
     setSearch("");
     setSearchResult([]);
-    console.log("here now");
   };
 
   const handleRemoveFromGroup = (userToRemove) => {
@@ -222,7 +221,7 @@ const GroupModalView = ({ children }) => {
         position: "top",
       });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       toast({
         title: "Failed to Create the Chat!",
         description: error.response.data,

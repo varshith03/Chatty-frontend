@@ -43,7 +43,7 @@ const Signup = () => {
       });
       return;
     }
-    console.log(pics);
+    // console.log(pics);
     if (pics.type === "image/jpeg" || pics.type === "image/png") {
       const data = new FormData();
       data.append("file", pics);
@@ -56,7 +56,7 @@ const Signup = () => {
         .then((res) => res.json())
         .then((data) => {
           setProfile_pic(data.url.toString());
-          console.log(data.url.toString());
+          // console.log(data.url.toString());
           setLoading(false);
           toast({
             title: "Photo Uploaded",
@@ -68,7 +68,7 @@ const Signup = () => {
         })
         .catch((err) => {
           setLoading(false);
-          console.log(err);
+          // console.log(err);
           return;
         });
     } else {
@@ -134,7 +134,7 @@ const Signup = () => {
       localStorage.setItem("userInfo", JSON.stringify(data));
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       toast({
         title: "Error Occured.",
         description: error.message,

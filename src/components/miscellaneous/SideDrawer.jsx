@@ -1,6 +1,8 @@
 import React, { useContext, useState } from "react";
 import {
   Avatar,
+  AvatarBadge,
+  Badge,
   Box,
   Button,
   Drawer,
@@ -31,6 +33,7 @@ import axios from "axios";
 import { apiURL } from "../../constants/common";
 import UserListItem from "../User/UserListItem";
 import "@fortawesome/fontawesome-free/css/all.css";
+import { getSender } from "../../config/ChatLogic";
 
 const SideDrawer = () => {
   const [search, setSearch] = useState("");
@@ -40,7 +43,14 @@ const SideDrawer = () => {
   const [isRegular, setIsRegular] = useState(true);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { user, setSelectedChat, chats, setChats } = useContext(ChatContext);
+  const {
+    user,
+    setSelectedChat,
+    chats,
+    setChats,
+    notification,
+    setNotification,
+  } = useContext(ChatContext);
   const toast = useToast();
   const navigate = useNavigate();
   const { colorMode, toggleColorMode } = useColorMode();
@@ -48,8 +58,6 @@ const SideDrawer = () => {
 
   const bgColor =
     colorMode === "light" ? theme.colors.white : theme.colors.gray["800"];
-  const textColor =
-    colorMode === "light" ? theme.colors.black : theme.colors.white;
 
   const handleSearch = async () => {
     if (!search) {
@@ -86,7 +94,7 @@ const SideDrawer = () => {
         });
       }
     } catch (error) {
-      console.log(error.message);
+      // console.log(error.message);
       toast({
         title: "Error Occurred.",
         description: "Failed to get user",
@@ -181,11 +189,28 @@ const SideDrawer = () => {
               ) : (
                 <i className="fa-solid fa-bell fa-lg"></i>
               )}
+              {notification.length > 0 && (
+                <Badge colorScheme="red" borderRadius="full" mt={-5}>
+                  {notification.length}
+                </Badge>
+              )}
             </MenuButton>
-            <MenuList>
-              <MenuItem>notification 1</MenuItem>
-              <MenuItem>notification 2</MenuItem>
-              <MenuItem>notification 3</MenuItem>
+
+            <MenuList textAlign="center">
+              {!notification.length && "No new notifications"}
+              {notification.map((notif) => (
+                <MenuItem
+                  key={notif._id}
+                  onClick={() => {
+                    setSelectedChat(notif.chat);
+                    setNotification(notification.filter((n) => n !== notif));
+                  }}
+                >
+                  {notif.chat.isGroupChat
+                    ? `New Message in ${notif.chat.chatName}`
+                    : `New Message from ${getSender(user, notif.chat.users)}`}
+                </MenuItem>
+              ))}
             </MenuList>
           </Menu>
           <Menu>

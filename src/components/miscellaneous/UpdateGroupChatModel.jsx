@@ -148,7 +148,7 @@ const UpdateGroupChatModel = ({
         position: "top",
       });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       toast({
         title: "Error Occured!",
         description: error.response.data.message,
@@ -216,7 +216,6 @@ const UpdateGroupChatModel = ({
 
   const handleRename = async () => {
     if (!groupChatName) return;
-    console.log(groupChatName);
 
     try {
       setRenameLoading(true);

@@ -11,7 +11,6 @@ import theme from "./theme/theme.js";
 function App() {
   return (
     <div className="App">
-      <ChatProvider theme={theme}>
         <Routes>
           <Route path="/" element={<HomePage />}></Route>
           <Route
@@ -24,7 +23,6 @@ function App() {
           ></Route>
           <Route path="/error" element={<ErrorPage />} />
         </Routes>
-      </ChatProvider>
     </div>
   );
 }

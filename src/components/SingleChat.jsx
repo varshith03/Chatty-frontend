@@ -31,7 +31,8 @@ const SingleChat = ({ refreshChats, setRefreshChats }) => {
   const [typing, setTyping] = useState(false);
   const [istyping, setIsTyping] = useState(false);
 
-  const { user, selectedChat, setSelectedChat } = useContext(ChatContext);
+  const { user, selectedChat, setSelectedChat, notification, setNotification } =
+    useContext(ChatContext);
 
   const { colorMode } = useColorMode();
   const theme = useTheme();
@@ -56,12 +57,18 @@ const SingleChat = ({ refreshChats, setRefreshChats }) => {
     selectedChatCompare = selectedChat;
   }, [selectedChat]);
 
+  console.log("notitiit--", notification);
+
+
   useEffect(() => {
     socket.on("message received", (newMessageReceived) => {
       if (selectedChat && newMessageReceived.chat._id === selectedChat._id) {
         setMessages([...messages, newMessageReceived]);
       } else {
-        // Update notification for other chats
+        if (!notification.includes(newMessageReceived)) {
+          setNotification([newMessageReceived, ...notification]);
+          setRefreshChats(!refreshChats);
+        }
       }
     });
 
@@ -86,7 +93,7 @@ const SingleChat = ({ refreshChats, setRefreshChats }) => {
         `${apiURL}/api/message/${selectedChat._id}`,
         config
       );
-      console.log(messages);
+      // console.log(messages);
       setMessages(data);
       setLoading(false);
       socket.emit("join chat", selectedChat._id);
@@ -121,7 +128,7 @@ const SingleChat = ({ refreshChats, setRefreshChats }) => {
           },
           config
         );
-        console.log(data);
+        // console.log(data);
         socket.emit("new message", data);
         setMessages([...messages, data]);
       } catch (error) {
@@ -213,7 +220,7 @@ const SingleChat = ({ refreshChats, setRefreshChats }) => {
                 display="flex"
                 flexDirection="column"
                 overflowY="scroll"
-                scrollbarWidth="none"
+                scrollbarwidth="none"
               >
                 <ScrollableChat messages={messages} />
               </Box>
