@@ -20,7 +20,7 @@ import ScrollableChat from "./miscellaneous/ScrollableChat.jsx";
 import { useTheme } from "@emotion/react";
 import io from "socket.io-client";
 
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = import.meta.env.VITE_APP_ENDPOINT;
 var socket, selectedChatCompare;
 
 const SingleChat = ({ refreshChats, setRefreshChats }) => {
@@ -58,7 +58,6 @@ const SingleChat = ({ refreshChats, setRefreshChats }) => {
   }, [selectedChat]);
 
   console.log("notitiit--", notification);
-
 
   useEffect(() => {
     socket.on("message received", (newMessageReceived) => {

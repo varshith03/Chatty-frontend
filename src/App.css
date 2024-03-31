@@ -3,8 +3,8 @@
 .App {
   min-height: 100vh;
   display: flex;
-  background-image: url("../assets/bg1.png");
-  /* background-image: url('../assets/chat-gif.gif'); */
+  /* background-image: url("../assets/bg1.png"); */
+  background-image: url('../assets/chat-gif.gif');
   background-size: cover;
   background-position: center;
 }
