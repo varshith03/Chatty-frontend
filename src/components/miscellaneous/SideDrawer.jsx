@@ -166,11 +166,15 @@ const SideDrawer = () => {
         <Text fontSize="3xl" fontFamily="Work sans">
           CHATTY
         </Text>
-        <div>
+        <Box>
+          <Button
+            bgColor={bgColor}
+            onClick={toggleColorMode}
+            p={{ base: 1, md: 4 }}
+          >
+            {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+          </Button>
           <Menu>
-            <Button bgColor={bgColor} onClick={toggleColorMode} mr={2}>
-              {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-            </Button>
             <MenuButton p={1} onClick={toggleBellIcon}>
               {isRegular ? (
                 <i className="fa-regular fa-bell fa-lg"></i>
@@ -187,6 +191,7 @@ const SideDrawer = () => {
           <Menu>
             <MenuButton
               as={Button}
+              p={{ base: 1, md: 4 }}
               bgColor={bgColor}
               rightIcon={<ChevronDownIcon />}
             >
@@ -205,7 +210,7 @@ const SideDrawer = () => {
               <MenuItem onClick={logoutHandler}>Logout</MenuItem>
             </MenuList>
           </Menu>
-        </div>
+        </Box>
       </Box>
 
       <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
