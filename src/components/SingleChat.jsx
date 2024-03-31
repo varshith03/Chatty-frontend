@@ -44,6 +44,11 @@ const SingleChat = ({ refreshChats, setRefreshChats }) => {
     socket.on("connected", () => setSocketConnected(true));
     socket.on("typing", () => setIsTyping(true));
     socket.on("stop typing", () => setIsTyping(false));
+
+    return () => {
+      socket.emit("setup", user);
+      socket.disconnect();
+    };
   }, []);
 
   useEffect(() => {
@@ -53,15 +58,16 @@ const SingleChat = ({ refreshChats, setRefreshChats }) => {
 
   useEffect(() => {
     socket.on("message received", (newMessageReceived) => {
-      if (
-        !selectedChatCompare ||
-        selectedChat._id !== newMessageReceived.chat._id
-      ) {
-        //update notification
-      } else {
+      if (selectedChat && newMessageReceived.chat._id === selectedChat._id) {
         setMessages([...messages, newMessageReceived]);
+      } else {
+        // Update notification for other chats
       }
     });
+
+    // return () => {
+    //   socket.off("message received");
+    // };
   });
 
   const fetchMessages = async () => {
@@ -115,7 +121,7 @@ const SingleChat = ({ refreshChats, setRefreshChats }) => {
           },
           config
         );
-        // console.log(data);
+        console.log(data);
         socket.emit("new message", data);
         setMessages([...messages, data]);
       } catch (error) {
@@ -141,15 +147,10 @@ const SingleChat = ({ refreshChats, setRefreshChats }) => {
       socket.emit("typing", selectedChat._id);
     }
 
-    let lastTypingTime = new Date().getTime();
-    var timerLength = 3000;
+    const timerLength = 3000;
     setTimeout(() => {
-      var timeNow = new Date().getTime();
-      var timeDiff = timeNow - lastTypingTime;
-      if (timeDiff >= timerLength && typing) {
-        socket.emit("stop typing", selectedChat._id);
-        setTyping(false);
-      }
+      setTyping(false);
+      socket.emit("stop typing", selectedChat._id);
     }, timerLength);
   };
 
