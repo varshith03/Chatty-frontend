@@ -1,5 +1,5 @@
-import { Avatar, Box, Tooltip, useConst } from "@chakra-ui/react";
-import React, { useContext } from "react";
+import { Avatar, Box, Image, Text, Tooltip, useConst } from "@chakra-ui/react";
+import React, { useContext, useEffect, useRef } from "react";
 import ScrollableFeed from "react-scrollable-feed";
 import { ChatContext } from "../../Context/ChatProvider";
 import {
@@ -10,8 +10,20 @@ import {
 const ScrollableChat = ({ messages }) => {
   const { user } = useContext(ChatContext);
 
+  const scrollableFeedRef = useRef();
+
+  const scrollToBottom = () => {
+    if (scrollableFeedRef.current) {
+      scrollableFeedRef.current.scrollToBottom();
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
   return (
-    <ScrollableFeed>
+    <ScrollableFeed ref={scrollableFeedRef}>
       {messages?.map?.((msg, index) => (
         <Box display="flex" key={msg._id}>
           {(isSamePerson(messages, msg, index, user._id) ||
@@ -33,12 +45,26 @@ const ScrollableChat = ({ messages }) => {
             color="black"
             borderTopLeftRadius={msg.sender._id === user._id ? 10 : 0}
             borderTopRightRadius={msg.sender._id !== user._id ? 10 : 0}
-            padding="5px 15px"
             maxWidth="75%"
             mt={1}
             ml={senderMargin(messages, msg, index, user._id)}
           >
-            {msg.content}
+            {msg.content ? (
+              // Render msg content if present
+              <Box padding="5px 15px">{msg.content}</Box>
+            ) : (
+              // Render Image tag if msg has image
+              msg.image && (
+                <Image
+                  src={msg.image}
+                  alt="Uploaded Image"
+                  maxW="200px"
+                  maxH="200px"
+                  objectFit="cover"
+                  borderRadius={10}
+                />
+              )
+            )}
           </Box>
         </Box>
       ))}
