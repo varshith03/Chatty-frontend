@@ -29,7 +29,7 @@ export const uploadFileToCloudinary = (file, setLoading, setUploadedFileUrl, toa
           setUploadedFileUrl(data.url);
           setLoading(false);
           toast({
-            title: "Photo Uploaded",
+            title: "Photo Saved",
             status: "success",
             duration: 3000,
             isClosable: true,

@@ -16,6 +16,7 @@ import { apiURL } from "../../constants/common";
 import Icon from "react-icons-kit";
 import { eye, eyeOff } from "react-icons-kit/feather";
 import CustomFileUpload from "../miscellaneous/CustomFileUpload";
+import { uploadFileToCloudinary } from "../../config/uploadFile";
 
 const Signup = () => {
   const [show, setShow] = useState(false);
@@ -27,62 +28,17 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
   const toast = useToast();
 
-  const { VITE_APP_CLOUDINARY_URL, VITE_APP_CLOUD_NAME } = import.meta.env;
-
   const handleClick = () => setShow(!show);
 
-  const postDetails = (pics) => {
-    setLoading(true);
-    if (pics === undefined) {
-      toast({
-        title: "Please Select an Image!",
-        status: "warning",
-        duration: 5000,
-        isClosable: true,
-        position: "top-right",
-      });
-      return;
-    }
-    // console.log(pics);
-    if (pics.type === "image/jpeg" || pics.type === "image/png") {
-      const data = new FormData();
-      data.append("file", pics);
-      data.append("upload_preset", "chat-app");
-      data.append("cloud_name", VITE_APP_CLOUD_NAME);
-      fetch(VITE_APP_CLOUDINARY_URL, {
-        method: "post",
-        body: data,
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setProfile_pic(data.url.toString());
-          // console.log(data.url.toString());
-          setLoading(false);
-          toast({
-            title: "Photo Uploaded",
-            status: "success",
-            duration: 3000,
-            isClosable: true,
-            position: "top-right",
-          });
-        })
-        .catch((err) => {
-          setLoading(false);
-          // console.log(err);
-          return;
-        });
-    } else {
-      toast({
-        title: "Please Select an Image!",
-        status: "warning",
-        duration: 5000,
-        isClosable: true,
-        position: "top-right",
-      });
-      setLoading(false);
-      return;
-    }
+  const handleImageUpload = (file) => {
+    let selectedFile = file;
+    setProfile_pic(selectedFile);
+    uploadFileToCloudinary(selectedFile, setLoading, setProfile_pic, toast);
   };
+
+  useEffect(() => {
+    console.log(profile_pic);
+  }, [profile_pic]);
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -205,7 +161,10 @@ const Signup = () => {
           accept="image/*"
           onChange={(e) => postDetails(e.target.files[0])}
         ></Input> */}
-        <CustomFileUpload onChange={(e) => postDetails(e.target.files[0])} />
+        <CustomFileUpload
+          profile_pic={profile_pic}
+          onChange={handleImageUpload}
+        />
       </FormControl>
 
       <Button
